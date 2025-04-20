@@ -29,6 +29,10 @@ where
     /// configuration. It is generally recommended not to change configuration
     /// before calling this method.
     pub fn init<D: DelayNs>(mut self, delay: &mut D) -> Result<DW1000<SPI, Ready>, Error<SPI>> {
+
+        // Set robust SPI mode. See user manual, section 7.2.6 on SPI_EDGE.
+        self.ll.sys_cfg().modify(|_, w| w.spi_edge(0b1))?;
+
         // Set AGC_TUNE1. See user manual, section 2.5.5.1.
         self.ll.agc_tune1().write(|w| w.value(0x8870))?;
 
