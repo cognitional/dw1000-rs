@@ -450,6 +450,19 @@ where
         Ok(())
     }
 
+    /// Allows the replacement of the SPI driver.
+    /// 
+    /// This is useful when the SPI driver needs to be changed, for example when changing the SPI speed.
+    pub fn replace_spi(
+        &mut self,
+        new_spi: SPI,
+    ) -> Result<(), Error<SPI>> {
+        self.ll.access_spi(|_oldspi| {
+            new_spi
+        });
+        Ok(())
+    }
+
     /// Puts the dw1000 into sleep mode.
     ///
     /// - `irq_on_wakeup`: When set to true, the IRQ pin will be asserted when the radio wakes up
