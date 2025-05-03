@@ -18,6 +18,25 @@ where
         }
     }
 
+    /// Create a ready instance of `DW1000` without initialising the DW1000 device
+    /// 
+    /// Initialisation of the DW1000 is not performed after this method is called,
+    /// leaving the device in the previous state.
+    /// 
+    /// This enables the user to initialise the DW1000 at low SPI bus speed,
+    /// then change out the SPI peripheral with one configured for a higher speed.
+    /// 
+    /// The prevous DW1000 instance must be dropped  and a new one created with 'new' 
+    /// before calling this method in order to release resources required to 
+    /// instantiate the new SPI peripheral.
+    pub fn without_init(self) -> Result<DW1000<SPI, Ready>, Error<SPI>>  {
+        Ok(DW1000 {
+            ll: self.ll,
+            seq: self.seq,
+            state: Ready,
+        })
+    }
+
     /// Initialize the DW1000
     ///
     /// The DW1000's default configuration is somewhat inconsistent, and the
